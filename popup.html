@@ -3,29 +3,51 @@
   <head>
     <meta charset="utf-8" />
     <style>
-      :root { color-scheme: light dark; }
+      :root {
+        color-scheme: light dark;
+        --line: color-mix(in srgb, currentColor 15%, transparent);
+        --muted: color-mix(in srgb, currentColor 55%, transparent);
+      }
       body {
-        width: 260px;
+        width: 300px;
         margin: 0;
-        padding: 14px 16px;
-        font: 14px/1 system-ui, sans-serif;
+        font: 15px/1.2 system-ui, sans-serif;
       }
+      header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 14px 16px 12px;
+        border-bottom: 1px solid var(--line);
+      }
+      header svg { flex: none; }
       h1 {
-        font-size: 16px;
-        margin: 0 0 12px;
-        padding-bottom: 12px;
-        border-bottom: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+        font-size: 20px;
+        font-weight: 500;
+        margin: 0;
+        flex: 1;
       }
+      #power {
+        appearance: none;
+        border: 0;
+        padding: 0;
+        background: none;
+        color: var(--muted);
+        cursor: pointer;
+      }
+      #power:hover { color: inherit; }
+      #list { padding: 6px 16px; }
       label {
         display: flex;
         align-items: center;
         gap: 12px;
-        padding: 7px 0;
+        padding: 9px 0;
         cursor: pointer;
       }
       /* toggle: a checkbox with the box drawn as a pill + ::before knob */
       input {
         appearance: none;
+        flex: none;
         margin: 0;
         width: 34px;
         height: 20px;
@@ -46,11 +68,30 @@
       }
       input:checked { background: #2f7cf6; }
       input:checked::before { transform: translateX(14px); }
+      footer {
+        padding: 10px 16px;
+        border-top: 1px solid var(--line);
+        font-size: 12px;
+        color: var(--muted);
+      }
     </style>
   </head>
   <body>
-    <h1>Shorts Blocker</h1>
+    <header>
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#e0245e" stroke-width="1.6">
+        <circle cx="12" cy="12" r="10" />
+        <path d="M10 8.5l6 3.5-6 3.5z" fill="#e0245e" stroke="none" />
+      </svg>
+      <h1>Shorts Blocker</h1>
+      <button id="power" title="Toggle everything">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M12 3v9" />
+          <path d="M6.2 6.2a8 8 0 1 0 11.6 0" />
+        </svg>
+      </button>
+    </header>
     <div id="list"></div>
+    <footer>Blocking short-form video feeds.</footer>
     <script src="dist/popup.js"></script>
   </body>
 </html>
