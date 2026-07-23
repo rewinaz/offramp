@@ -4,7 +4,21 @@
   "version": "1.0.0",
   "description": "An exit from the endless scroll. Blocks short-form video feeds and any site you name.",
   "permissions": ["declarativeNetRequest", "storage"],
-  "action": { "default_popup": "popup.html", "default_title": "Offramp" },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Offramp",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png"
+    }
+  },
   "host_permissions": [
     "*://*.youtube.com/*",
     "*://*.instagram.com/*",

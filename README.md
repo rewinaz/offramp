@@ -1,3 +1,5 @@
+<img src="icons/icon128.png" width="88" alt="Offramp">
+
 # Offramp
 
 An exit from the endless scroll. Chrome MV3 extension, TypeScript. `tsc` only —
