@@ -9,17 +9,52 @@
         height: 100vh;
         display: grid;
         place-content: center;
+        gap: 0.5rem;
         text-align: center;
         font: 16px/1.6 system-ui, sans-serif;
         background: #111;
         color: #eee;
+        animation: fade 0.4s ease;
       }
-      h1 { font-size: 2rem; margin: 0 0 0.5rem; }
-      p { opacity: 0.6; margin: 0; }
+      @keyframes fade { from { opacity: 0; transform: translateY(6px); } }
+      h1 { font-size: 2.4rem; margin: 0; }
+      p { opacity: 0.55; margin: 0; }
+      #stat {
+        margin-top: 2.5rem;
+        font-size: 0.8rem;
+        opacity: 0.35;
+        letter-spacing: 0.03em;
+      }
     </style>
   </head>
   <body>
-    <h1>Nope.</h1>
-    <p>Short-form video is blocked here.</p>
+    <h1 id="head">Nope.</h1>
+    <p id="sub">Short-form video is blocked here.</p>
+    <div id="stat"></div>
+
+    <script>
+      const HEADS = ["Nope.", "Not today.", "Touch grass.", "Go build something.", "Reclaim it.", "Look up."];
+      const SUBS = [
+        "That itch you felt? It'll pass.",
+        "The feed will survive without you.",
+        "Your future self says thanks.",
+        "Go do the thing you're avoiding.",
+        "Boredom is where ideas come from.",
+        "Nothing new down there anyway.",
+      ];
+      const pick = (a) => a[Math.floor(Math.random() * a.length)];
+      document.getElementById("head").textContent = pick(HEADS);
+      document.getElementById("sub").textContent = pick(SUBS);
+
+      // Local tally of dodged rabbit holes (extension-page origin, persists).
+      // ponytail: 6 min/block is a guess — tune MINUTES to taste.
+      const MINUTES = 6;
+      const n = +(localStorage.blocks || 0) + 1;
+      localStorage.blocks = n;
+      const mins = n * MINUTES;
+      const time = mins < 60 ? mins + " min" : (mins / 60).toFixed(1) + " hrs";
+      document.getElementById("stat").textContent =
+        n + " rabbit hole" + (n === 1 ? "" : "s") + " dodged · ~" + time + " reclaimed";
+    </script>
   </body>
 </html>

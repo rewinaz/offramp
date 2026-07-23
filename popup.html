@@ -45,7 +45,7 @@
         cursor: pointer;
       }
       /* toggle: a checkbox with the box drawn as a pill + ::before knob */
-      input {
+      input[type="checkbox"] {
         appearance: none;
         flex: none;
         margin: 0;
@@ -56,7 +56,7 @@
         transition: background 0.15s;
         cursor: pointer;
       }
-      input::before {
+      input[type="checkbox"]::before {
         content: "";
         display: block;
         width: 16px;
@@ -66,8 +66,65 @@
         background: #fff;
         transition: transform 0.15s;
       }
-      input:checked { background: #2f7cf6; }
-      input:checked::before { transform: translateX(14px); }
+      input[type="checkbox"]:checked { background: #2f7cf6; }
+      input[type="checkbox"]:checked::before { transform: translateX(14px); }
+      #custom {
+        padding: 8px 16px 4px;
+        border-top: 1px solid var(--line);
+      }
+      h2 {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--muted);
+        margin: 4px 0 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      .add { display: flex; gap: 8px; }
+      #url {
+        flex: 1;
+        min-width: 0;
+        padding: 6px 9px;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: transparent;
+        color: inherit;
+        font: inherit;
+      }
+      #addBtn {
+        flex: none;
+        padding: 6px 14px;
+        border: 0;
+        border-radius: 6px;
+        background: #2f7cf6;
+        color: #fff;
+        font: inherit;
+        cursor: pointer;
+      }
+      .custom-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 0;
+      }
+      .custom-row span {
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .custom-row button {
+        flex: none;
+        appearance: none;
+        border: 0;
+        background: none;
+        color: var(--muted);
+        font-size: 18px;
+        line-height: 1;
+        padding: 0 4px;
+        cursor: pointer;
+      }
+      .custom-row button:hover { color: #e0245e; }
       footer {
         padding: 10px 16px;
         border-top: 1px solid var(--line);
@@ -91,6 +148,14 @@
       </button>
     </header>
     <div id="list"></div>
+    <div id="custom">
+      <h2>Custom sites</h2>
+      <div class="add">
+        <input id="url" type="text" placeholder="reddit.com" />
+        <button id="addBtn">Add</button>
+      </div>
+      <div id="customList"></div>
+    </div>
     <footer>Blocking short-form video feeds.</footer>
     <script src="dist/popup.js"></script>
   </body>
