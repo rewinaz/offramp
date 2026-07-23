@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "name": "Shorts Blocker",
+  "name": "Offramp",
   "version": "1.0.0",
-  "description": "Blocks short-form video feeds: YouTube Shorts, Instagram Reels, TikTok, Facebook Reels.",
+  "description": "An exit from the endless scroll. Blocks short-form video feeds and any site you name.",
   "permissions": ["declarativeNetRequest", "storage"],
-  "action": { "default_popup": "popup.html", "default_title": "Shorts Blocker" },
+  "action": { "default_popup": "popup.html", "default_title": "Offramp" },
   "host_permissions": [
     "*://*.youtube.com/*",
     "*://*.instagram.com/*",
