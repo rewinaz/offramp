@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Offramp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An exit from the endless scroll. Blocks short-form video feeds and any site you name.",
   "permissions": ["declarativeNetRequest", "storage"],
   "icons": {
