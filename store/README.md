@@ -13,3 +13,15 @@ The popup shots run the real `dist/popup.js` against a mocked `chrome` API, so
 they stay accurate — they are not redrawn mockups.
 
 Also required by the store and already in the repo: `icons/icon128.png`.
+
+## Promo tiles
+
+| File | Size | Format |
+|---|---|---|
+| `promo-small-440x280.png` | 440×280 | 24-bit PNG, no alpha |
+| `promo-marquee-1400x560.png` | 1400×560 | 24-bit PNG, no alpha |
+
+The store rejects PNGs with an alpha channel. These render on an opaque
+background and are verified `mode=RGB` before committing.
+
+See `listing.md` for the description and every Privacy-practices field.

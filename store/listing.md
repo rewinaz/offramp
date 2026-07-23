@@ -42,16 +42,47 @@ Blocking runs through Chrome's declarativeNetRequest API, which means Chrome mat
 
 No runtime dependencies. The full source is public: https://github.com/rewinaz/offramp
 
-## Permission justifications
+## Privacy practices tab
 
-For the dashboard's privacy tab.
+Every field below is required before the store will let you publish. Paste each
+into its matching box.
 
-**declarativeNetRequest** — Blocks and redirects the sites the user has enabled. Rules are evaluated by Chrome itself; the extension never reads request or response contents.
+### Single purpose description
 
-**storage** — Saves the user's toggle states and custom site list via chrome.storage.sync so settings persist and follow their Chrome profile.
+Offramp has one purpose: to block distracting websites. It stops short-form video feeds (YouTube Shorts, Instagram Reels, Facebook Reels, TikTok) and any additional sites the user chooses to add, replacing them with a blocked page that encourages the user to do something else.
 
-**Host permissions (youtube.com, instagram.com, tiktok.com, facebook.com)** — Required because these sites use `redirect` rules, which Chrome only permits with host access. User-added custom sites deliberately use `block` instead, so adding a site never requires new permissions.
+### Justification — declarativeNetRequest
 
-**Remote code** — None. All code ships in the package.
+Offramp's only function is blocking distracting sites, and declarativeNetRequest is the API Chrome provides to do that. It is used to block or redirect page loads for the sites the user has switched on: YouTube Shorts are redirected to the standard YouTube video player, and other blocked sites are sent to the extension's own blocked page.
 
-**Data usage** — No user data is collected or transmitted.
+Rules are evaluated by Chrome itself. The extension never sees, reads, or modifies the contents of any request or response, and it does not use the webRequest API. Static rules ship in the package; rules for user-added sites are created as dynamic rules from the user's own list.
+
+### Justification — host permissions
+
+Host permissions are requested for exactly four domains: youtube.com, instagram.com, tiktok.com, and facebook.com.
+
+Chrome requires host access for declarativeNetRequest rules that use the `redirect` action. Offramp redirects on these four sites — YouTube Shorts to the normal video player, and Instagram/Facebook Reels and TikTok to the extension's blocked page — so host access for them is required for the extension to function.
+
+No content is read from these sites. The only content script polls the page URL to catch in-page navigations that network rules cannot see (for example, clicking a Short from the YouTube home feed) and redirects when the URL matches. It does not read page contents, cookies, form data, or any user information.
+
+Sites the user adds themselves deliberately use the `block` action rather than `redirect`, specifically so that adding a site never requires requesting access to additional hosts.
+
+### Justification — remote code
+
+Offramp does not use remote code. All JavaScript, HTML, and CSS is contained in the uploaded package. The extension loads no external scripts, fetches no code at runtime, and uses no eval() or equivalent. It has no runtime dependencies and makes no network requests of any kind.
+
+### Justification — storage
+
+The storage permission saves the user's own settings: which built-in sites are switched on, and their list of custom sites with the optional names they gave them. It is stored with chrome.storage.sync so settings persist between sessions and follow the user's Chrome profile across their devices.
+
+No browsing history, page content, or personal information is stored. Nothing is sent anywhere — the data stays in the user's browser and their own Google account.
+
+### Data usage certification
+
+Tick all three:
+
+- Does not sell or transfer user data to third parties, outside of approved use cases
+- Does not use or transfer user data for purposes unrelated to the item's single purpose
+- Does not use or transfer user data to determine creditworthiness or for lending purposes
+
+Declare **no data collected** in every category. Offramp collects nothing.
