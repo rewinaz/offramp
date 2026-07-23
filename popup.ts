@@ -23,19 +23,23 @@ function normalize(input: string): string {
     .replace(/\/+$/, "");
 }
 
-async function syncDynamic(custom: string[]): Promise<void> {
+type Custom = { url: string; on: boolean; name?: string };
+
+async function syncDynamic(custom: Custom[]): Promise<void> {
   const existing = await chrome.declarativeNetRequest.getDynamicRules();
   await chrome.declarativeNetRequest.updateDynamicRules({
     removeRuleIds: existing.map((r) => r.id),
-    addRules: custom.map((entry, i) => ({
-      id: 1000 + i,
-      priority: 1,
-      action: { type: chrome.declarativeNetRequest.RuleActionType.BLOCK },
-      condition: {
-        urlFilter: "||" + entry,
-        resourceTypes: [chrome.declarativeNetRequest.ResourceType.MAIN_FRAME],
-      },
-    })),
+    addRules: custom
+      .filter((c) => c.on)
+      .map((c, i) => ({
+        id: 1000 + i,
+        priority: 1,
+        action: { type: chrome.declarativeNetRequest.RuleActionType.BLOCK },
+        condition: {
+          urlFilter: "||" + c.url,
+          resourceTypes: [chrome.declarativeNetRequest.ResourceType.MAIN_FRAME],
+        },
+      })),
   });
 }
 
@@ -75,12 +79,14 @@ void (async () => {
   // Custom sites.
   const customList = document.getElementById("customList")!;
   const url = document.getElementById("url") as HTMLInputElement;
-  let custom = (saved.custom as unknown as string[] | undefined) ?? [];
+  const name = document.getElementById("name") as HTMLInputElement;
+  // Older versions stored plain strings; migrate them to {url, on}.
+  const raw = (saved.custom as unknown as (string | Custom)[] | undefined) ?? [];
+  const custom: Custom[] = raw.map((c) => (typeof c === "string" ? { url: c, on: true } : c));
 
-  function commit(): void {
+  function save(): void {
     void chrome.storage.sync.set({ custom });
     void syncDynamic(custom);
-    render();
   }
 
   function render(): void {
@@ -88,31 +94,59 @@ void (async () => {
     custom.forEach((entry, i) => {
       const row = document.createElement("div");
       row.className = "custom-row";
-      const name = document.createElement("span");
-      name.textContent = entry;
+
+      const toggle = document.createElement("input");
+      toggle.type = "checkbox";
+      toggle.checked = entry.on;
+      toggle.addEventListener("change", () => {
+        entry.on = toggle.checked;
+        save();
+      });
+
+      // Named entries show the name on top with the url beneath; unnamed
+      // entries just show the url.
+      const label = document.createElement("div");
+      label.className = "label";
+      label.title = entry.url;
+      const title = document.createElement("span");
+      title.textContent = entry.name || entry.url;
+      label.append(title);
+      if (entry.name) {
+        const host = document.createElement("span");
+        host.className = "host";
+        host.textContent = entry.url;
+        label.append(host);
+      }
+
       const del = document.createElement("button");
       del.textContent = "×";
       del.title = "Remove";
       del.addEventListener("click", () => {
         custom.splice(i, 1);
-        commit();
+        save();
+        render();
       });
-      row.append(name, del);
+
+      row.append(toggle, label, del);
       customList.append(row);
     });
   }
 
   function add(): void {
     const entry = normalize(url.value);
+    const label = name.value.trim();
     url.value = "";
-    if (!entry || custom.includes(entry)) return;
-    custom.push(entry);
-    commit();
+    name.value = "";
+    if (!entry || custom.some((c) => c.url === entry)) return;
+    custom.push({ url: entry, on: true, ...(label && { name: label }) });
+    save();
+    render();
   }
 
   document.getElementById("addBtn")!.addEventListener("click", add);
-  url.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") add();
-  });
+  for (const field of [url, name])
+    field.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") add();
+    });
   render();
 })();

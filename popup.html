@@ -80,7 +80,9 @@
         text-transform: uppercase;
         letter-spacing: 0.05em;
       }
-      .add { display: flex; gap: 8px; }
+      .add { display: flex; flex-direction: column; gap: 6px; }
+      .add-row { display: flex; gap: 8px; }
+      #name,
       #url {
         flex: 1;
         min-width: 0;
@@ -104,15 +106,23 @@
       .custom-row {
         display: flex;
         align-items: center;
-        gap: 8px;
-        padding: 7px 0;
+        gap: 12px;
+        padding: 9px 0;
       }
-      .custom-row span {
+      #customList { margin-top: 4px; }
+      .custom-row .label {
         flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        line-height: 1.35;
+      }
+      .custom-row .label span {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
       }
+      .custom-row .label .host { font-size: 11px; opacity: 0.5; }
       .custom-row button {
         flex: none;
         appearance: none;
@@ -151,8 +161,11 @@
     <div id="custom">
       <h2>Custom sites</h2>
       <div class="add">
-        <input id="url" type="text" placeholder="reddit.com" />
-        <button id="addBtn">Add</button>
+        <input id="name" type="text" placeholder="Name (optional)" />
+        <div class="add-row">
+          <input id="url" type="text" placeholder="reddit.com" />
+          <button id="addBtn">Add</button>
+        </div>
       </div>
       <div id="customList"></div>
     </div>
