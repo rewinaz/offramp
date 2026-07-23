@@ -16,6 +16,15 @@ const SITE_LABELS = {
   other: "Other",
 };
 
+// Distinguishable on the dark background, loosely nodding to each brand.
+const SITE_COLORS = {
+  youtube: "#ef4444",
+  instagram: "#e1306c",
+  facebook: "#3b82f6",
+  tiktok: "#22d3ee",
+  other: "#94a3b8",
+};
+
 const statsDayKey = (d = new Date()) => d.toLocaleDateString("en-CA"); // local YYYY-MM-DD
 
 async function statsGet() {

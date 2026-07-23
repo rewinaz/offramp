@@ -15,25 +15,56 @@ function tiles(s) {
     </div>`;
 }
 
+// Donut of which platform you tried to open, + legend with counts and share.
 function sites(s) {
   const rows = Object.entries(s.sites || {})
     .filter(([, n]) => n > 0)
     .sort((a, b) => b[1] - a[1]);
   if (!rows.length) return "";
-  const max = Math.max(...rows.map(([, n]) => n));
-  const items = rows
+
+  const sum = rows.reduce((a, [, n]) => a + n, 0);
+  const R = 54, SW = 20, C = 2 * Math.PI * R;
+
+  let acc = 0;
+  const arcs = rows
     .map(([key, n]) => {
-      const label = SITE_LABELS[key] || key;
-      const w = Math.round((n / max) * 100);
+      const frac = n / sum;
+      // 1px gap between slices so adjacent colours stay readable
+      const len = Math.max(0, frac * C - (rows.length > 1 ? 1.5 : 0));
+      const arc = `<circle cx="70" cy="70" r="${R}" fill="none"
+        stroke="${SITE_COLORS[key] || SITE_COLORS.other}" stroke-width="${SW}"
+        stroke-dasharray="${len.toFixed(2)} ${(C - len).toFixed(2)}"
+        stroke-dashoffset="${(-acc).toFixed(2)}" />`;
+      acc += frac * C;
+      return arc;
+    })
+    .join("");
+
+  const legend = rows
+    .map(([key, n]) => {
+      const pct = Math.round((n / sum) * 100);
       return `
-        <div class="site">
-          <span class="sl">${label}</span>
-          <div class="strack"><div class="sfill" style="width:${w}%"></div></div>
-          <span class="sn">${fmt(n)}</span>
+        <div class="lrow">
+          <span class="dot" style="background:${SITE_COLORS[key] || SITE_COLORS.other}"></span>
+          <span class="lname">${SITE_LABELS[key] || key}</span>
+          <span class="lcount">${fmt(n)}</span>
+          <span class="lpct">${pct}%</span>
         </div>`;
     })
     .join("");
-  return `<div class="chart"><h2>By site</h2><div class="sites">${items}</div></div>`;
+
+  return `
+    <div class="chart"><h2>What you tried to open</h2>
+      <div class="donut">
+        <svg viewBox="0 0 140 140" role="img" aria-label="Share of blocks by platform">
+          <circle cx="70" cy="70" r="${R}" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="${SW}" />
+          <g transform="rotate(-90 70 70)">${arcs}</g>
+          <text class="ctr" x="70" y="70" text-anchor="middle" dominant-baseline="middle">${fmt(sum)}</text>
+          <text class="csub" x="70" y="88" text-anchor="middle">BLOCKED</text>
+        </svg>
+        <div class="legend">${legend}</div>
+      </div>
+    </div>`;
 }
 
 function chart(s) {

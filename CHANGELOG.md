@@ -12,8 +12,8 @@ strictly greater than the last, so numbers only ever go up.
 ### Added
 
 - Stats page (`stats.html`), opened from the popup footer or the blocked page.
-  Shows total blocks, estimated time reclaimed, best day, days active, a per-site
-  breakdown, and a 14-day bar chart. Backed by a shared tally in
+  Shows total blocks, estimated time reclaimed, best day, days active, a platform donut
+  chart, and a 14-day bar chart. Backed by a shared tally in
   `chrome.storage.local`; blocks are tagged by site via a `?s=` redirect param.
 
 ## [1.0.0] — 2026-07-23
