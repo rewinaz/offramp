@@ -5,7 +5,8 @@
   "scripts": {
     "build": "tsc",
     "typecheck": "tsc --noEmit",
-    "test": "node test.ts"
+    "test": "node test.ts",
+    "package": "npm run build && rm -f offramp.zip && zip -qr offramp.zip manifest.json rules.json popup.html blocked.html blocked.js dist icons -x '*.DS_Store' 'dist/test.js' && echo 'offramp.zip ready for the Chrome Web Store'"
   },
   "devDependencies": {
     "@types/chrome": "^0.0.287",

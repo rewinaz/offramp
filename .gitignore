@@ -2,3 +2,6 @@ node_modules/
 dist/
 # Chrome regenerates this when it indexes the static rulesets on load
 _metadata/
+
+# store upload artifact
+offramp.zip
