@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      :root { color-scheme: light dark; }
+      body {
+        width: 260px;
+        margin: 0;
+        padding: 14px 16px;
+        font: 14px/1 system-ui, sans-serif;
+      }
+      h1 {
+        font-size: 16px;
+        margin: 0 0 12px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+      }
+      label {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 7px 0;
+        cursor: pointer;
+      }
+      /* toggle: a checkbox with the box drawn as a pill + ::before knob */
+      input {
+        appearance: none;
+        margin: 0;
+        width: 34px;
+        height: 20px;
+        border-radius: 10px;
+        background: #c4c4c4;
+        transition: background 0.15s;
+        cursor: pointer;
+      }
+      input::before {
+        content: "";
+        display: block;
+        width: 16px;
+        height: 16px;
+        margin: 2px;
+        border-radius: 50%;
+        background: #fff;
+        transition: transform 0.15s;
+      }
+      input:checked { background: #2f7cf6; }
+      input:checked::before { transform: translateX(14px); }
+    </style>
+  </head>
+  <body>
+    <h1>Shorts Blocker</h1>
+    <div id="list"></div>
+    <script src="dist/popup.js"></script>
+  </body>
+</html>

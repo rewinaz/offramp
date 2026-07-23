@@ -1,0 +1,36 @@
+{
+  "manifest_version": 3,
+  "name": "Shorts Blocker",
+  "version": "1.0.0",
+  "description": "Blocks short-form video feeds: YouTube Shorts, Instagram Reels, TikTok, Facebook Reels.",
+  "permissions": ["declarativeNetRequest", "storage"],
+  "action": { "default_popup": "popup.html", "default_title": "Shorts Blocker" },
+  "host_permissions": [
+    "*://*.youtube.com/*",
+    "*://*.instagram.com/*",
+    "*://*.tiktok.com/*",
+    "*://*.facebook.com/*"
+  ],
+  "declarative_net_request": {
+    "rule_resources": [
+      { "id": "rules", "enabled": true, "path": "rules.json" }
+    ]
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.youtube.com/*",
+        "*://*.instagram.com/*",
+        "*://*.facebook.com/*"
+      ],
+      "js": ["dist/block.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["blocked.html"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
