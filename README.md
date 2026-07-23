@@ -29,6 +29,30 @@ npm test
 
 Node runs `test.ts` directly (native type stripping) — no build needed.
 
+## Releasing
+
+`package.json` is the single source of truth for the version; `manifest.json` is
+kept in lockstep by `sync-version.mjs`, which runs automatically on `npm version`.
+
+```
+npm version patch    # or minor / major
+```
+
+That runs the tests, bumps `package.json`, rewrites `manifest.json`, then commits
+and tags (`v1.2.3`). Push with `git push --follow-tags`. Then:
+
+```
+npm run package
+```
+
+which refuses to build if the two versions have drifted, and emits
+`offramp-<version>.zip` for the Chrome Web Store.
+
+Store version rules are stricter than semver: 1–4 dot-separated integers, each
+0–65535, **no** pre-release suffixes (`1.0.0-beta` is rejected), and every upload
+must be strictly greater than the last. `sync-version.mjs` enforces all of this
+before you get as far as the upload form. Record changes in [CHANGELOG.md](CHANGELOG.md).
+
 ## Edit what's blocked
 
 Per-site toggles live in the toolbar popup (`popup.html` / `popup.ts`), stored

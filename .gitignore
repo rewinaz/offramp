@@ -4,4 +4,4 @@ dist/
 _metadata/
 
 # store upload artifact
-offramp.zip
+offramp-*.zip
