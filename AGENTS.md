@@ -52,6 +52,29 @@ Three separate mechanisms. Know which one a change belongs to:
 - **Custom entries are `{url, on, name?}`**, migrated on load from an older
   plain-string format. Preserve that migration.
 
+## Block stats
+
+A tally lives in `chrome.storage.local` under `stats` as `{ total, days: {"YYYY-MM-DD": n} }`,
+shown on `stats.html`. Only observable blocks are counted, and each is counted once:
+
+- `blocked.html` (via `blocked.js`) records IG/FB Reels and TikTok — everything that
+  lands there.
+- `block.ts` records YouTube Shorts, because they redirect to the watch page and
+  never hit `blocked.html`. It awaits the write before navigating away.
+- Custom sites use `block`, so no page loads and nothing can be recorded. This is
+  a genuine limit, stated on the stats page — don't fake it.
+
+Per-site attribution rides on a `?s=<site>` query: the static rules redirect to
+`/blocked.html?s=instagram` etc. (query strings in `extensionPath` are valid —
+it's in the official DNR docs), and `block.ts` appends the same for SPA redirects.
+`blocked.js` reads it and tags the block. YouTube is tagged `youtube` directly in
+`block.ts`.
+
+`stats-lib.js` holds the shared helpers and is loaded by both `blocked.html` and
+`stats.html`. `block.ts` inlines its own copy (content-script world, can't share
+the file). The 14-day chart is **SVG** — flex height resolution mangles zero-height
+bars, so don't reintroduce a flexbox chart.
+
 ## Adding a built-in site
 
 Three places must agree, or the popup toggle silently controls the wrong rule:

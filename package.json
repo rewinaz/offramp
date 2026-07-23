@@ -9,7 +9,7 @@
     "sync-version": "node sync-version.mjs",
     "preversion": "npm test",
     "version": "node sync-version.mjs && git add manifest.json",
-    "package": "node sync-version.mjs --check && npm run build && rm -f offramp-*.zip && zip -qr offramp-$npm_package_version.zip manifest.json rules.json popup.html blocked.html blocked.js dist icons -x '*.DS_Store' 'dist/test.js' && echo \"offramp-$npm_package_version.zip ready for the Chrome Web Store\""
+    "package": "node sync-version.mjs --check && npm run build && rm -f offramp-*.zip && zip -qr offramp-$npm_package_version.zip manifest.json rules.json popup.html blocked.html blocked.js stats.html stats.js stats-lib.js dist icons -x '*.DS_Store' 'dist/test.js' && echo \"offramp-$npm_package_version.zip ready for the Chrome Web Store\""
   },
   "devDependencies": {
     "@types/chrome": "^0.0.287",

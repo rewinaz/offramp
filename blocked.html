@@ -52,6 +52,8 @@
       blockquote cite { display: block; margin-top: 0.4rem; font-size: 0.8rem; opacity: 0.6; font-style: normal; }
       #nudge { margin-top: 1.6rem; font-size: 0.9rem; opacity: 0.75; }
       #stat { margin-top: 2.4rem; font-size: 0.78rem; opacity: 0.32; letter-spacing: 0.03em; }
+      #stat.link { cursor: pointer; }
+      #stat.link:hover { opacity: 0.6; }
     </style>
   </head>
   <body>
@@ -62,6 +64,7 @@
     <p id="nudge"></p>
     <div id="stat"></div>
 
+    <script src="stats-lib.js"></script>
     <script src="blocked.js"></script>
   </body>
 </html>

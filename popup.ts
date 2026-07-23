@@ -51,6 +51,10 @@ function apply(site: { key: string; ruleId: number }, on: boolean): void {
   });
 }
 
+// Extension-page URLs aren't known until runtime, so set the stats link here.
+(document.getElementById("statsLink") as HTMLAnchorElement).href =
+  chrome.runtime.getURL("stats.html");
+
 void (async () => {
   const saved = (await chrome.storage.sync.get(null)) as Settings;
   const list = document.getElementById("list")!;

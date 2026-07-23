@@ -29,12 +29,29 @@ const q = pick(QUOTES);
 document.getElementById("quote").innerHTML = "“" + q[0] + "”<cite>— " + q[1] + "</cite>";
 document.getElementById("nudge").textContent = pick(NUDGES);
 
-// Local tally of dodged rabbit holes (extension-page origin, persists).
-// ponytail: 6 min/block is a guess — tune MINUTES to taste.
-const MINUTES = 6;
-const n = +(localStorage.blocks || 0) + 1;
-localStorage.blocks = n;
-const mins = n * MINUTES;
-const time = mins < 60 ? mins + " min" : (mins / 60).toFixed(1) + " hrs";
-document.getElementById("stat").textContent =
-  n + " rabbit hole" + (n === 1 ? "" : "s") + " dodged · ~" + time + " reclaimed";
+// Record this block, then show the running tally as a link to the stats page.
+// Helpers come from stats-lib.js, loaded before this script.
+void (async () => {
+  // One-time migration of the old per-page localStorage counter.
+  const legacy = +localStorage.blocks || 0;
+  if (legacy) {
+    const s = await statsGet();
+    if (!s.migrated) {
+      s.total += legacy;
+      s.migrated = true;
+      await chrome.storage.local.set({ stats: s });
+    }
+    delete localStorage.blocks;
+  }
+
+  // The blocking rule passes the source site as ?s= (see rules.json / block.ts).
+  const site = new URLSearchParams(location.search).get("s") || "other";
+  const s = await statsBump(site);
+  const el = document.getElementById("stat");
+  el.textContent =
+    s.total + " rabbit hole" + (s.total === 1 ? "" : "s") +
+    " dodged · ~" + statsFmtTime(s.total * STATS_MINUTES) + " reclaimed";
+  el.classList.add("link");
+  el.title = "See your stats";
+  el.addEventListener("click", () => (location.href = chrome.runtime.getURL("stats.html")));
+})();
