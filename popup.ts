@@ -55,6 +55,15 @@ function apply(site: { key: string; ruleId: number }, on: boolean): void {
 (document.getElementById("statsLink") as HTMLAnchorElement).href =
   chrome.runtime.getURL("stats.html");
 
+// Running total in the footer, so the stats link has something to promise.
+void chrome.storage.local.get("stats").then(({ stats }) => {
+  const total = (stats as { total?: number } | undefined)?.total ?? 0;
+  const el = document.getElementById("count")!;
+  if (!total) return; // keep the tagline until there's something to show
+  el.classList.add("has");
+  el.innerHTML = `<b>${total.toLocaleString()}</b> dodged`;
+});
+
 void (async () => {
   const saved = (await chrome.storage.sync.get(null)) as Settings;
   const list = document.getElementById("list")!;
